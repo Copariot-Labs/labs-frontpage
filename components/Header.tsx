@@ -1,9 +1,13 @@
 "use client"
 
 import Link from "next/link"
-import { Atom } from "lucide-react"
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 
 export default function Header() {
+  const pathname = usePathname()
+  const isHomePage = pathname === '/'
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
@@ -12,30 +16,55 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed w-full z-10 bg-black/80 backdrop-blur-md">
-      <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
+    <header className="fixed top-0 w-full z-50 bg-black/50 backdrop-blur-sm">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
-          <Atom className="w-8 h-8 text-blue-500" />
+          <Image
+            src="/logos/cop.png"
+            alt="Copariot Labs Logo"
+            width={40}
+            height={40}
+            className="object-contain"
+          />
           <span className="text-xl font-bold">Copariot Labs</span>
         </Link>
-        <ul className="flex space-x-6">
-          <li>
-            <button onClick={() => scrollToSection("research")} className="hover:text-blue-400 transition-colors">
-              Research
-            </button>
-          </li>
-          <li>
-            <button onClick={() => scrollToSection("products")} className="hover:text-blue-400 transition-colors">
-              Products
-            </button>
-          </li>
-          <li>
-            <button onClick={() => scrollToSection("partners")} className="hover:text-blue-400 transition-colors">
-              Partners
-            </button>
-          </li>
-        </ul>
-      </nav>
+        
+        <nav className="flex items-center space-x-6">
+          {isHomePage ? (
+            // 主页显示滚动导航
+            <>
+              <button 
+                onClick={() => scrollToSection("research")} 
+                className="hover:text-blue-400 transition-colors"
+              >
+                Research
+              </button>
+              <button 
+                onClick={() => scrollToSection("products")} 
+                className="hover:text-blue-400 transition-colors"
+              >
+                Products
+              </button>
+              <button 
+                onClick={() => scrollToSection("partners")} 
+                className="hover:text-blue-400 transition-colors"
+              >
+                Partners
+              </button>
+            </>
+          ) : (
+            // 其他页面显示常规导航
+            <>
+              <Link href="/about" className="hover:text-gray-300 transition-colors">
+                About
+              </Link>
+              <Link href="/projects" className="hover:text-gray-300 transition-colors">
+                Projects
+              </Link>
+            </>
+          )}
+        </nav>
+      </div>
     </header>
   )
 }

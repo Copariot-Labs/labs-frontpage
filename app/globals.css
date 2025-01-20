@@ -2,34 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 其他自定义样式放在下面 */
 :root {
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 0, 0, 0;
   --background-end-rgb: 0, 0, 0;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
-}
-
 @layer utilities {
-  .animate-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .bg-gradient-animate {
+    @apply bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-[length:200%_200%];
+    animation: gradientMove 3s ease infinite;
   }
 }
 
-.pulse-animation {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
+@keyframes gradientMove {
+  0%, 100% {
+    background-position: 0% 50%;
   }
   50% {
-    opacity: 0.5;
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 测试自定义类 */
+@layer components {
+  .test-tailwind {
+    @apply bg-blue-500 text-white p-4;
+  }
+}
+
+/* 网格动画样式 */
+.grid-bg {
+  background-color: black;
+  background-size: 60px 60px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  animation: grid-move 15s linear infinite;
+  transform-origin: center;
+  perspective: 1500px;
+}
+
+.grid-bg::before {
+  content: '';
+  position: absolute;
+  inset: -100px;
+  background: radial-gradient(circle at center, 
+    transparent 0%,
+    rgba(0, 0, 0, 0.85) 30%,  /* 调整渐变过渡 */
+    rgba(0, 0, 0, 1) 60%      /* 边缘完全黑色 */
+  );
+  z-index: 2;
+}
+
+@keyframes grid-move {
+  0% {
+    transform: rotateX(70deg) translateY(0) scale(2);
+  }
+  100% {
+    transform: rotateX(70deg) translateY(60px) scale(2);
+  }
+}
+
+/* 更明显的光效 */
+.glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, 
+    rgba(64, 179, 255, 0.4) 0%, 
+    transparent 70%
+  );
+  filter: blur(30px);
+  animation: glow-float 8s ease-in-out infinite;
+}
+
+@keyframes glow-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(50px, -50px) scale(1.2);
   }
 }
 
